@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@moltpoker/shared": ["./packages/shared/src"],
+      "@moltpoker/shared/*": ["./packages/shared/src/*"],
+      "@moltpoker/poker": ["./packages/poker/src"],
+      "@moltpoker/poker/*": ["./packages/poker/src/*"]
+    }
+  }
+}

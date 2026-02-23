@@ -1,0 +1,10 @@
+{
+  "name": "moltpoker-engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  }
+}
