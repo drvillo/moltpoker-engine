@@ -1,4 +1,4 @@
-import type { Card } from '@moltpoker/shared'
+import type { Card } from '@drvillo/moltpoker-shared'
 import { describe, it, expect } from 'vitest'
 
 import { createDeck, shuffleDeck } from '../src/deck.js'

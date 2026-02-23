@@ -1,4 +1,4 @@
-import type { ActionResult, LegalAction, PlayerAction } from '@moltpoker/shared';
+import type { ActionResult, LegalAction, PlayerAction } from '@drvillo/moltpoker-shared';
 
 import type { TableRuntime } from './runtime.js';
 

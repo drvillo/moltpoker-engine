@@ -1,4 +1,4 @@
-import type { Card } from '@moltpoker/shared';
+import type { Card } from '@drvillo/moltpoker-shared';
 import seedrandom from 'seedrandom';
 
 const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'] as const;

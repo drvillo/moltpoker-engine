@@ -1,4 +1,4 @@
-import type { Card } from '@moltpoker/shared'
+import type { Card } from '@drvillo/moltpoker-shared'
 import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
 
@@ -49,7 +49,7 @@ function twoPlayerDeal(): fc.Arbitrary<{
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 // Default iterations. Increase locally for more thorough runs:
-//   NUM_RUNS=10000 pnpm --filter @moltpoker/poker test
+//   NUM_RUNS=10000 pnpm --filter @drvillo/moltpoker-poker test
 const NUM_RUNS = Number(process.env.NUM_RUNS ?? 200)
 
 // ─── Property Tests ─────────────────────────────────────────────────────────

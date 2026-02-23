@@ -2,10 +2,10 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@moltpoker/shared": ["./packages/shared/src"],
-      "@moltpoker/shared/*": ["./packages/shared/src/*"],
-      "@moltpoker/poker": ["./packages/poker/src"],
-      "@moltpoker/poker/*": ["./packages/poker/src/*"]
+      "@drvillo/moltpoker-shared": ["./packages/shared/src"],
+      "@drvillo/moltpoker-shared/*": ["./packages/shared/src/*"],
+      "@drvillo/moltpoker-poker": ["./packages/poker/src"],
+      "@drvillo/moltpoker-poker/*": ["./packages/poker/src/*"]
     }
   }
 }

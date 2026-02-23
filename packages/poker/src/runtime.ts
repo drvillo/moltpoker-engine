@@ -8,7 +8,7 @@ import type {
   PlayerAction,
   PlayerState,
   Pot,
-} from '@moltpoker/shared';
+} from '@drvillo/moltpoker-shared';
 
 import { createDeck, shuffleDeck } from './deck.js';
 import { compareHands, evaluateHand, type HandEvaluation } from './handEvaluator.js';

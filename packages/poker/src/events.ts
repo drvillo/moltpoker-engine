@@ -11,7 +11,7 @@ import type {
   StreetDealtEventPayload,
   TableEndedEventPayload,
   TableStartedEventPayload,
-} from '@moltpoker/shared';
+} from '@drvillo/moltpoker-shared';
 
 /**
  * Event types for game logging

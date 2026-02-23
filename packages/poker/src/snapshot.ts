@@ -1,4 +1,4 @@
-import type { GameStatePayload } from '@moltpoker/shared';
+import type { GameStatePayload } from '@drvillo/moltpoker-shared';
 
 import type { TableRuntime } from './runtime.js';
 

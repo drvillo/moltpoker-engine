@@ -1,4 +1,4 @@
-import type { Card } from '@moltpoker/shared';
+import type { Card } from '@drvillo/moltpoker-shared';
 
 import { getRankValue } from './deck.js';
 

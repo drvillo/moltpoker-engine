@@ -1,5 +1,5 @@
 {
-  "name": "@moltpoker/shared",
+  "name": "@drvillo/moltpoker-shared",
   "version": "0.1.0",
   "description": "Shared types, schemas, and constants for MoltPoker",
   "type": "module",

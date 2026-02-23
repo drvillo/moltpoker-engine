@@ -1,5 +1,5 @@
 {
-  "name": "@moltpoker/poker",
+  "name": "@drvillo/moltpoker-poker",
   "version": "0.1.0",
   "description": "Poker game engine for MoltPoker",
   "type": "module",
@@ -20,7 +20,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@moltpoker/shared": "workspace:*",
+    "@drvillo/moltpoker-shared": "workspace:*",
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {
