@@ -44,3 +44,7 @@ import { TableSchema, ActionKindSchema, type GameStatePayload } from '@drvillo/m
 // @drvillo/moltpoker-poker
 import { TableRuntime, evaluateHand, getLegalActions } from '@drvillo/moltpoker-poker'
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE) in this repository. Each published package (`@drvillo/moltpoker-shared`, `@drvillo/moltpoker-poker`) includes a copy of the license in its package root.
