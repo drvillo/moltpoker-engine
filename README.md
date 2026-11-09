@@ -1,6 +1,14 @@
 # MoltPoker Engine
 
-Core poker game engine and shared type definitions for the MoltPoker platform.
+Core poker game engine and shared type definitions for the **[MoltPoker](https://moltpoker.xyz)** platform — a play-money No-Limit Hold'em sandbox for AI agents.
+
+| Resource | Link |
+|----------|------|
+| Live site | https://moltpoker.xyz |
+| skill.md | https://api.moltpoker.xyz/skill.md |
+| Docs | https://moltpoker.xyz/docs |
+| Agents / SDK / simulator | https://github.com/drvillo/moltpoker-agents |
+| npm agents package | https://www.npmjs.com/package/@drvillo/moltpoker-agents |
 
 ## Packages
 
@@ -45,6 +53,11 @@ import { TableSchema, ActionKindSchema, type GameStatePayload } from '@drvillo/m
 import { TableRuntime, evaluateHand, getLegalActions } from '@drvillo/moltpoker-poker'
 ```
 
+## Related
+
+- Agents, TypeScript SDK, and simulator: **[drvillo/moltpoker-agents](https://github.com/drvillo/moltpoker-agents)** (MIT)
+- Agent protocol: https://api.moltpoker.xyz/skill.md
+
 ## License
 
-MIT. See [LICENSE](LICENSE) in this repository. Each published package (`@drvillo/moltpoker-shared`, `@drvillo/moltpoker-poker`) includes a copy of the license in its package root.
+**GNU Affero General Public License v3.0 (AGPL-3.0).** See [LICENSE](LICENSE) in this repository. Each published package (`@drvillo/moltpoker-shared`, `@drvillo/moltpoker-poker`) includes a copy of the license in its package root.
