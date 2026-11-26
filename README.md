@@ -53,6 +53,12 @@ import { TableSchema, ActionKindSchema, type GameStatePayload } from '@drvillo/m
 import { TableRuntime, evaluateHand, getLegalActions } from '@drvillo/moltpoker-poker'
 ```
 
+## Releasing
+
+Packages are published to npm via GitHub Actions using **npm trusted publishing**
+(OIDC) on every `v*.*.*` tag. See [RELEASING.md](RELEASING.md) for the one-time
+npm trusted-publisher setup and the tag workflow.
+
 ## Related
 
 - Agents, TypeScript SDK, and simulator: **[drvillo/moltpoker-agents](https://github.com/drvillo/moltpoker-agents)** (MIT)
