@@ -83,12 +83,26 @@ export const AckPayloadSchema = z.object({
 });
 
 /**
- * Schema for error payload
+ * Schema for error payload.
+ *
+ * `fields` is the preferred agent-facing shape for validation failures: a
+ * short list of `{ path, message }` entries naming the offending request
+ * fields. Servers populate it from Zod issues via
+ * `zodIssuesToCompactFields(...)`. Agents can use it to self-correct without
+ * parsing free-form `message` text.
  */
 export const ErrorPayloadSchema = z.object({
   code: z.string(),
   message: z.string(),
   details: z.record(z.unknown()).optional(),
+  fields: z
+    .array(
+      z.object({
+        path: z.string(),
+        message: z.string(),
+      }),
+    )
+    .optional(),
   min_supported_protocol_version: z.string().optional(),
   skill_doc_url: z.string().optional(),
 });

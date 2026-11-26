@@ -9,3 +9,4 @@ export * from './types/index.js';
 
 // Utils
 export * from './utils/bucketKey.js';
+export * from './utils/compactErrors.js';
