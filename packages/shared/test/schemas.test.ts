@@ -404,6 +404,132 @@ describe('Schemas', () => {
       });
       expect(result.success).toBe(false);
     });
+
+    // R1.a — amount: null is accepted on fold/check/call and normalized to undefined
+    it('should accept amount: null for fold and normalize to undefined', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'fold',
+        amount: null,
+      });
+      expect(result.success).toBe(true);
+      if (result.success) expect(result.data.amount).toBeUndefined();
+    });
+
+    it('should accept amount: null for check and normalize to undefined', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'check',
+        amount: null,
+      });
+      expect(result.success).toBe(true);
+      if (result.success) expect(result.data.amount).toBeUndefined();
+    });
+
+    it('should accept amount: null for call and normalize to undefined', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'call',
+        amount: null,
+      });
+      expect(result.success).toBe(true);
+      if (result.success) expect(result.data.amount).toBeUndefined();
+    });
+
+    // R1.b — amount: null on raiseTo is a hard error with path=['amount']
+    it('should reject amount: null for raiseTo', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'raiseTo',
+        amount: null,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const amountIssue = result.error.issues.find((i) => i.path.join('.') === 'amount');
+        expect(amountIssue).toBeDefined();
+      }
+    });
+
+    // R1.c — positive amount on fold/check/call is a hard error with path=['amount']
+    it('should reject positive amount on fold', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'fold',
+        amount: 50,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const amountIssue = result.error.issues.find((i) => i.path.join('.') === 'amount');
+        expect(amountIssue).toBeDefined();
+      }
+    });
+
+    it('should reject positive amount on check', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'check',
+        amount: 10,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const amountIssue = result.error.issues.find((i) => i.path.join('.') === 'amount');
+        expect(amountIssue).toBeDefined();
+      }
+    });
+
+    it('should reject positive amount on call', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'call',
+        amount: 20,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const amountIssue = result.error.issues.find((i) => i.path.join('.') === 'amount');
+        expect(amountIssue).toBeDefined();
+      }
+    });
+
+    // R1.d — omitted amount is fine for non-raise, required for raiseTo
+    it('should accept omitted amount for fold/check/call', () => {
+      expect(PlayerActionSchema.safeParse({ turn_token: 't', kind: 'fold' }).success).toBe(true);
+      expect(PlayerActionSchema.safeParse({ turn_token: 't', kind: 'check' }).success).toBe(true);
+      expect(PlayerActionSchema.safeParse({ turn_token: 't', kind: 'call' }).success).toBe(true);
+    });
+
+    it('should reject missing amount for raiseTo', () => {
+      const result = PlayerActionSchema.safeParse({ turn_token: 't', kind: 'raiseTo' });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const amountIssue = result.error.issues.find((i) => i.path.join('.') === 'amount');
+        expect(amountIssue).toBeDefined();
+      }
+    });
+
+    it('should reject zero amount for raiseTo', () => {
+      const result = PlayerActionSchema.safeParse({ turn_token: 't', kind: 'raiseTo', amount: 0 });
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject negative amount for raiseTo', () => {
+      const result = PlayerActionSchema.safeParse({ turn_token: 't', kind: 'raiseTo', amount: -1 });
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject non-integer amount for raiseTo', () => {
+      const result = PlayerActionSchema.safeParse({ turn_token: 't', kind: 'raiseTo', amount: 10.5 });
+      expect(result.success).toBe(false);
+    });
+
+    it('should still accept reasoning as optional', () => {
+      const result = PlayerActionSchema.safeParse({
+        turn_token: 't',
+        kind: 'fold',
+        amount: null,
+        reasoning: 'bad hand',
+      });
+      expect(result.success).toBe(true);
+    });
   });
 
   describe('ActionResultSchema', () => {
@@ -684,5 +810,108 @@ describe('Schemas', () => {
         expect(result.success).toBe(false);
       });
     });
+  });
+});
+
+// R2 — TableEndReasons canonicalization: WAITING_TIMEOUT + SEATS_STALE
+describe('TableEndReasons', () => {
+  it('should expose WAITING_TIMEOUT and SEATS_STALE constants', async () => {
+    const { TableEndReasons } = await import('../src/constants/tableEndReasons.js');
+    expect(TableEndReasons.WAITING_TIMEOUT).toBe('waiting_timeout');
+    expect(TableEndReasons.SEATS_STALE).toBe('seats_stale');
+  });
+
+  it('should include labels for the new reasons', async () => {
+    const { TableEndReasons, TableEndReasonLabels } = await import('../src/constants/tableEndReasons.js');
+    expect(TableEndReasonLabels[TableEndReasons.WAITING_TIMEOUT]).toBeDefined();
+    expect(TableEndReasonLabels[TableEndReasons.SEATS_STALE]).toBeDefined();
+    expect(typeof TableEndReasonLabels[TableEndReasons.WAITING_TIMEOUT]).toBe('string');
+    expect(typeof TableEndReasonLabels[TableEndReasons.SEATS_STALE]).toBe('string');
+  });
+
+  it('TableStatusPayloadSchema accepts waiting_timeout and seats_stale as ended reasons', () => {
+    const waitTimeout = TableStatusPayloadSchema.safeParse({
+      status: 'ended',
+      reason: 'waiting_timeout',
+    });
+    expect(waitTimeout.success).toBe(true);
+
+    const seatsStale = TableStatusPayloadSchema.safeParse({
+      status: 'ended',
+      reason: 'seats_stale',
+    });
+    expect(seatsStale.success).toBe(true);
+  });
+});
+
+// R4 — Compact field-path utility in shared
+describe('zodIssuesToCompactFields', () => {
+  it('should map Zod issue list to [{path, message}] capped at 5 × 120 chars', async () => {
+    const { zodIssuesToCompactFields } = await import('../src/utils/compactErrors.js');
+    const issues = [
+      { path: ['action', 'amount'], message: 'Expected number, received null', code: 'invalid_type' as const },
+      { path: ['action', 'kind'], message: 'Invalid enum value', code: 'invalid_enum_value' as const },
+    ];
+    const compact = zodIssuesToCompactFields(issues);
+    expect(compact).toEqual([
+      { path: 'action.amount', message: 'Expected number, received null' },
+      { path: 'action.kind', message: 'Invalid enum value' },
+    ]);
+  });
+
+  it('should cap at 5 entries', async () => {
+    const { zodIssuesToCompactFields } = await import('../src/utils/compactErrors.js');
+    const issues = Array.from({ length: 10 }, (_, i) => ({
+      path: ['f', String(i)],
+      message: `m${i}`,
+      code: 'custom' as const,
+    }));
+    const compact = zodIssuesToCompactFields(issues);
+    expect(compact.length).toBe(5);
+  });
+
+  it('should truncate each message to 120 chars', async () => {
+    const { zodIssuesToCompactFields } = await import('../src/utils/compactErrors.js');
+    const long = 'x'.repeat(500);
+    const compact = zodIssuesToCompactFields([
+      { path: ['f'], message: long, code: 'custom' as const },
+    ]);
+    expect(compact[0]!.message.length).toBe(120);
+  });
+
+  it('should return [] for empty/invalid input', async () => {
+    const { zodIssuesToCompactFields } = await import('../src/utils/compactErrors.js');
+    expect(zodIssuesToCompactFields([])).toEqual([]);
+    expect(zodIssuesToCompactFields(undefined)).toEqual([]);
+    expect(zodIssuesToCompactFields(null as unknown as never)).toEqual([]);
+  });
+
+  it('should include numeric path segments joined with "."', async () => {
+    const { zodIssuesToCompactFields } = await import('../src/utils/compactErrors.js');
+    const compact = zodIssuesToCompactFields([
+      { path: ['players', 0, 'stack'], message: 'must be int', code: 'custom' as const },
+    ]);
+    expect(compact[0]!.path).toBe('players.0.stack');
+  });
+});
+
+describe('ErrorPayloadSchema — fields', () => {
+  it('should accept a fields[] passthrough', async () => {
+    const { ErrorPayloadSchema } = await import('../src/schemas/ws.js');
+    const result = ErrorPayloadSchema.safeParse({
+      code: 'VALIDATION_ERROR',
+      message: 'Invalid message format',
+      fields: [{ path: 'action.amount', message: 'Expected number, received null' }],
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.fields?.[0]!.path).toBe('action.amount');
+    }
+  });
+
+  it('should still accept errors without fields', async () => {
+    const { ErrorPayloadSchema } = await import('../src/schemas/ws.js');
+    const result = ErrorPayloadSchema.safeParse({ code: 'X', message: 'y' });
+    expect(result.success).toBe(true);
   });
 });
